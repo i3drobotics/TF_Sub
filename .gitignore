@@ -1,0 +1,4 @@
+.vscode/settings.json
+*events.out.tfevents.*
+*.pyc
+*__pycache__*
