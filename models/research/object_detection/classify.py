@@ -15,11 +15,12 @@ from utils import visualization_utils as vis_util
 
 parser = argparse.ArgumentParser(description='Classify')
 parser.add_argument("--test_image", help = "test image filename")
+parser.add_argument("--inference_graph", help = "path to the directory where frozen_inference_graph is stored")
+parser.add_argument("--training_dir", help = "path to the directory where labelmap is stored")
 
 args = parser.parse_args()
   
 # Name of the directory containing the object detection module we're using 
-MODEL_NAME = 'inference_graph' # The path to the directory where frozen_inference_graph is stored. 
 IMAGE_NAME = args.test_image  # The path to the image in which the object has to be detected. 
   
 # Grab path to current working directory 
@@ -27,10 +28,10 @@ CWD_PATH = os.getcwd()
 
 # Path to frozen detection graph .pb file, which contains the model that is used 
 # for object detection. 
-PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_NAME, 'frozen_inference_graph.pb') 
+PATH_TO_CKPT = os.path.join(CWD_PATH, args.inference_graph, 'frozen_inference_graph.pb') 
   
 # Path to label map file 
-PATH_TO_LABELS = os.path.join(CWD_PATH, 'training', 'labelmap.pbtxt') 
+PATH_TO_LABELS = os.path.join(CWD_PATH, args.training_dir, 'labelmap.pbtxt')
   
 # Path to image 
 PATH_TO_IMAGE = os.path.join(CWD_PATH, IMAGE_NAME) 
