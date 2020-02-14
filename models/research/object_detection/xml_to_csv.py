@@ -2,6 +2,12 @@ import os
 import glob
 import pandas as pd
 import xml.etree.ElementTree as ET
+import argparse
+
+parser = argparse.ArgumentParser(description='XML_TO_CSV')
+parser.add_argument("--images_dir", help = "image directory for the train and test images (with xml files)")
+
+args = parser.parse_args()
 
 
 def xml_to_csv(path):
@@ -34,9 +40,9 @@ def xml_to_csv(path):
 
 def main():
     for folder in ['train', 'test']:
-        image_path = os.path.join(os.getcwd(), ('images/' + folder))
+        image_path = os.path.join(os.getcwd(), (args.images_dir +"/"+ folder))
         xml_df = xml_to_csv(image_path)
-        xml_df.to_csv(('images/'+folder+'_labels.csv'), index=None)
+        xml_df.to_csv((args.images_dir+"/"+folder+'_labels.csv'), index=None)
         print('Successfully converted xml to csv.')
 
 
