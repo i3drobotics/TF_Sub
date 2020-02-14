@@ -1,6 +1,12 @@
 import os
 import shutil
 import glob
+import argparse
+
+parser = argparse.ArgumentParser(description='Purge')
+parser.add_argument("--dir", help = "")
+
+args = parser.parse_args()
 
 def yes_or_no(question):
     answer = input(question + "(y/n): ").lower().strip()
@@ -17,12 +23,12 @@ def yes_or_no(question):
 
 cwd = os.getcwd()
 files2CleanList = []
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'training\\events.out.tfevents*'))
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'training\\model.ckpt*'))
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'training\\graph.pbtxt'))
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'training\\pipeline.config'))
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'training\\checkpoint'))
-files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,'inference_graph\\*'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\events.out.tfevents*'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\model.ckpt*'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\graph.pbtxt'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\pipeline.config'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\checkpoint'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'inference_graph\\*'))
 
 if yes_or_no("Are you sure you would like to purge the training data?"):
     # Iterate over the list of filepaths & remove each file.
