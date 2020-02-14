@@ -106,6 +106,8 @@ python export_inference_graph \
 import tensorflow as tf
 from google.protobuf import text_format
 import sys
+import shutil
+import os
 
 # This is needed since the notebook is stored in the object_detection folder. 
 sys.path.append("..") 
@@ -156,6 +158,10 @@ def main(_):
     ]
   else:
     input_shape = None
+  # remove files already in inference_graph folder
+  shutil.rmtree(FLAGS.output_directory)
+  os.makedirs(FLAGS.output_directory)
+  # export inference graph
   exporter.export_inference_graph(
       FLAGS.input_type, pipeline_config, FLAGS.trained_checkpoint_prefix,
       FLAGS.output_directory, input_shape=input_shape,

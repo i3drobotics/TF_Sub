@@ -29,6 +29,8 @@ files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'trainin
 files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\pipeline.config'))
 files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'training\\checkpoint'))
 files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'inference_graph\\*'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'images\\test_labels.csv'))
+files2CleanList = files2CleanList + glob.glob(os.path.join(cwd,args.dir,'images\\train_labels.csv'))
 
 if yes_or_no("Are you sure you would like to purge the training data?"):
     # Iterate over the list of filepaths & remove each file.
