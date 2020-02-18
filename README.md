@@ -58,7 +58,7 @@ See [here](https://www.tensorflow.org/install/gpu) for detailed install instruct
 ## Create repository (Option 1)
 For easy access and running across multiple machines it is advised to create a git repository for the dataset. To set this up create a folder on your computer (e.g. TF_CatPlants_Detect) then clone this example template repository that has everything setup to your folder.
 ```
-cd PATH_TO_YOUR_FOLDER/..
+cd PATH_TO_YOUR_DIR/..
 git clone --recursive https://github.com/i3drobotics/TF_Object_Detect_Template.git YOUR_FOLDER
 ```
 Push this repository to your own git repository url
@@ -69,11 +69,18 @@ Push this repository to your own git repository url
 - Click the “Create repository” button.
 - Make a note of the repository url
 ```
-cd [PATH TO REPO]
+cd PATH_TO_YOUR_DIR
 git remote set-url origin https://github.com/USERNAME/REPOSITORY.git
 git push -u origin master
 ```
 This template has gitignore, lfs, and submodule setup to work out of the box.
+
+To make sure you are always using the latest version of TF_Sub pull the master branch:
+```
+cd PATH_TO_YOUR_FOLDER/TF_Sub
+git checkout master
+git pull origin master
+```
 
 ## Create folder (Option 2)
 If you do not want to use Git to store your dataset you can run the repository from a folder on your computer. 
@@ -83,7 +90,7 @@ Create a folder e.g. 'TF_CatPlants_Detect'.
 Clone this repository to TF_Sub inside your folder
 ```
 cd PATH_TO_YOUR_DIR
-git clone https://github.com/i3drobotics/TF_Object_Detect_Template.git TF_Sub
+git clone https://github.com/i3drobotics/TF_Sub.git TF_Sub
 ```
 
 ## Initialise
