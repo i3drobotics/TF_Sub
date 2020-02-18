@@ -153,9 +153,18 @@
         {
             "label": "TF: Classify: Camera Feed",
             "type": "shell",
-            "command": "${config:python.pythonPath} classify_vid.py --inference_graph=../../../../inference_graph --training_dir=../../../../training --cam=0 --flip --split",
+            "command": "${config:python.pythonPath} classify_vid.py --inference_graph=../../../../inference_graph --training_dir=../../../../training --output_dir=../../../.. --cam=0 --flip --split",
             "options": {
                 "cwd": "${workspaceFolder}/TF_Sub/models/research/object_detection"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TF: Generate standalone",
+            "type": "shell",
+            "command": "${config:python.pythonPath} generate_standalone.py --inference_graph=../inference_graph --training_dir=../training --standalone_dir=../standalone",
+            "options": {
+                "cwd": "${workspaceFolder}/TF_Sub"
             },
             "problemMatcher": []
         }

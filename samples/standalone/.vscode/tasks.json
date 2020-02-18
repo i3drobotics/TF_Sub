@@ -1,0 +1,16 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "TF: Classify: Camera Feed",
+            "type": "shell",
+            "command": "${config:python.pythonPath} classify_vid.py --inference_graph=../../Model --training_dir=../../Model --output_dir=../../Result --cam=0 --flip --split",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts/object_detection"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
