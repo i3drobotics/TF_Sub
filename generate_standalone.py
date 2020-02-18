@@ -13,18 +13,22 @@ cwd = os.getcwd()
 
 inference_graph_dir = os.path.join(os.getcwd(),args.inference_graph)
 training_dir = os.path.join(os.getcwd(),args.training_dir)
-standalone_dir = os.path.join(os.getcwd(),args.standalone_dir)
+out_standalone_dir = os.path.join(os.getcwd(),args.standalone_dir)
 
 graph_file = os.path.join(inference_graph_dir,'frozen_inference_graph.pb')
 label_file = os.path.join(training_dir,'labelmap.pbtxt')
-scripts_dir = os.path.join(os.getcwd(),'samples/standalone/Scripts')
+standalone_dir = os.path.join(os.getcwd(),'samples/standalone')
 
-out_graph_file = os.path.join(standalone_dir,'Model','frozen_inference_graph.pb')
-out_label_file = os.path.join(standalone_dir,'Model','labelmap.pbtxt')
-out_scripts_dir = os.path.join(standalone_dir,'Scripts')
+out_graph_file = os.path.join(out_standalone_dir,'Model','frozen_inference_graph.pb')
+out_label_file = os.path.join(out_standalone_dir,'Model','labelmap.pbtxt')
+
+shutil.rmtree(out_standalone_dir) ## clean standalone directory if it already exists
+os.makedirs(out_standalone_dir)
+os.makedirs(os.path.join(out_standalone_dir,'Model'))
+os.makedirs(os.path.join(out_standalone_dir,'Scripts'))
+os.makedirs(os.path.join(out_standalone_dir,'Result'))
+
+copy_tree(standalone_dir, out_standalone_dir)
 
 shutil.copyfile(graph_file, out_graph_file)
 shutil.copyfile(label_file, out_label_file)
-shutil.rmtree(out_scripts_dir) ## clean scripts directory if it already exists
-os.makedirs(out_scripts_dir)
-copy_tree(scripts_dir, out_scripts_dir)
