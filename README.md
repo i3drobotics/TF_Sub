@@ -109,7 +109,6 @@ PATH_TO_YOUR_DIR
     inference_graph
     training
 ```
-There will be some sample data in 'images' and 'training' folders. 
 
 ## Setup VSCode
 VS Code tasks are provided in this repository to make running quick and easy. 
