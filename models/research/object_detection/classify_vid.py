@@ -16,8 +16,29 @@ from utils import visualization_utils as vis_util
 parser = argparse.ArgumentParser(description='Classify')
 parser.add_argument("--inference_graph", help = "path to the directory where frozen_inference_graph is stored")
 parser.add_argument("--training_dir", help = "path to the directory where labelmap is stored")
+parser.add_argument("--vid", help = "path to the video file to use")
+parser.add_argument("--cam", help = "index of usb camera to use")
+parser.add_argument("--split", action='store_true' ,help = "if defined will split the image into rgb and use r")
+parser.add_argument("--flip", action='store_true' ,help = "if defined will flip the image vertically")
 
-args = parser.parse_args()
+args, leftovers = parser.parse_known_args()
+
+if (args.cam is not None) and (args.vid is not None):
+    print("Cannot define both vid and cam. Only one must be used")
+    exit
+
+vid_index = None
+if args.cam is not None:
+    # convert string to int
+    vid_index = int(args.cam)
+elif args.vid is not None:
+    vid_index = args.vid
+else:
+    print("Must define vid or cam")
+    exit
+
+split_image = args.split
+flip_image = args.flip
   
 # Grab path to current working directory 
 CWD_PATH = os.getcwd() 
@@ -70,21 +91,21 @@ detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
 # Number of objects detected 
 num_detections = detection_graph.get_tensor_by_name('num_detections:0') 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(vid_index)
 
 while(True):
     # Load image from usb camera using OpenCV and 
     # expand image dimensions to have shape: [1, None, None, 3] 
     # i.e. a single-column array, where each item in the column has the pixel RGB value
-    ret, image_b = cap.read()
+    ret, frame = cap.read()
     if (ret):
-        image_left = image_b.copy()
-        image_left = cv2.flip(image_left[:, :, 1],0)
-        image_right = image_b.copy()
-        image_right = cv2.flip(image_right[:, :, 2],0)
+        if (split_image):
+            image_r = frame[:, :, 1]
+            frame = cv2.cvtColor(image_r,cv2.COLOR_GRAY2RGB)
+        if (flip_image):
+            frame = cv2.flip(frame,0)
 
-        image = cv2.cvtColor(image_left,cv2.COLOR_GRAY2RGB)
-        image_expanded = np.expand_dims(image, axis = 0) 
+        image_expanded = np.expand_dims(frame, axis = 0) 
         
         # Perform the actual detection by running the model with the image as input 
         (boxes, scores, classes, num) = sess.run( 
@@ -94,7 +115,7 @@ while(True):
         # Draw the results of the detection (aka 'visualize the results') 
         
         vis_util.visualize_boxes_and_labels_on_image_array( 
-            image, 
+            frame, 
             np.squeeze(boxes), 
             np.squeeze(classes).astype(np.int32), 
             np.squeeze(scores), 
@@ -104,7 +125,7 @@ while(True):
             min_score_thresh = 0.60) 
     
         # All the results have been drawn on the image. Now display the image. 
-        cv2.imshow('Object detector', image) 
+        cv2.imshow('Object detector', frame) 
     
     k = cv2.waitKey(1) 
     if (k == ord('q')):
