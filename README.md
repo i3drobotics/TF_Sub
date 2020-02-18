@@ -1,6 +1,6 @@
 # TensorFlow 1.15 (Faster RCNN Inception V2 COCO)
 This repository should not be used directly and should instead be used as a sub folder of a directory of your own dataset.
-See [here](https://github.com/i3drobotics/TF_Object_Detect_Template) for the template repository.
+See [here](https://github.com/i3drobotics/TF_Object_Detect_Template) for a template repository.
 
 ## Install Dependencies
 Install python 3.5+ *(tested up to Python v3.6.8)*
