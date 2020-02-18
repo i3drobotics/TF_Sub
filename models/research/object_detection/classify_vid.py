@@ -92,44 +92,52 @@ detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
 num_detections = detection_graph.get_tensor_by_name('num_detections:0') 
 
 cap = cv2.VideoCapture(vid_index)
-
+frame_counter = 0
 while(True):
     # Load image from usb camera using OpenCV and 
     # expand image dimensions to have shape: [1, None, None, 3] 
     # i.e. a single-column array, where each item in the column has the pixel RGB value
     ret, frame = cap.read()
-    if (ret):
-        if (split_image):
-            image_r = frame[:, :, 1]
-            frame = cv2.cvtColor(image_r,cv2.COLOR_GRAY2RGB)
-        if (flip_image):
-            frame = cv2.flip(frame,0)
+    frame_counter += 1
 
-        image_expanded = np.expand_dims(frame, axis = 0) 
+    if args.vid is not None:
+        if frame_counter >= cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT):
+            frame_counter = 0
+            cap.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, 0)
+    else:
+        if (ret):
+            if (split_image):
+                image_r = frame[:, :, 1]
+                frame = cv2.cvtColor(image_r,cv2.COLOR_GRAY2RGB)
+            if (flip_image):
+                frame = cv2.flip(frame,0)
+
+            image_expanded = np.expand_dims(frame, axis = 0) 
+            
+            # Perform the actual detection by running the model with the image as input 
+            (boxes, scores, classes, num) = sess.run( 
+                [detection_boxes, detection_scores, detection_classes, num_detections], 
+                feed_dict ={image_tensor: image_expanded}) 
+            
+            # Draw the results of the detection (aka 'visualize the results') 
+            
+            vis_util.visualize_boxes_and_labels_on_image_array( 
+                frame, 
+                np.squeeze(boxes), 
+                np.squeeze(classes).astype(np.int32), 
+                np.squeeze(scores), 
+                category_index, 
+                use_normalized_coordinates = True, 
+                line_thickness = 8, 
+                min_score_thresh = 0.60) 
         
-        # Perform the actual detection by running the model with the image as input 
-        (boxes, scores, classes, num) = sess.run( 
-            [detection_boxes, detection_scores, detection_classes, num_detections], 
-            feed_dict ={image_tensor: image_expanded}) 
-        
-        # Draw the results of the detection (aka 'visualize the results') 
-        
-        vis_util.visualize_boxes_and_labels_on_image_array( 
-            frame, 
-            np.squeeze(boxes), 
-            np.squeeze(classes).astype(np.int32), 
-            np.squeeze(scores), 
-            category_index, 
-            use_normalized_coordinates = True, 
-            line_thickness = 8, 
-            min_score_thresh = 0.60) 
-    
-        # All the results have been drawn on the image. Now display the image. 
-        cv2.imshow('Object detector', frame) 
-    
+            # All the results have been drawn on the image. Now display the image. 
+            cv2.imshow('Object detector', frame) 
+
     k = cv2.waitKey(1) 
     if (k == ord('q')):
         break
   
 # Clean up 
+cap.release()
 cv2.destroyAllWindows()
